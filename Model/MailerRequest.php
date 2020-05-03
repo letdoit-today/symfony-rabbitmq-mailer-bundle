@@ -2,6 +2,8 @@
 
 namespace DIT\RabbitMQMailerBundle\Model;
 
+use JMS\Serializer\Annotation as Serializer;
+
 /**
  * Class MailerRequest
  */
