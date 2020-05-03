@@ -3,6 +3,7 @@
 namespace DIT\RabbitMQMailerBundle\Model;
 
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\Mime\Address;
 
 /**
  * Class MailerRequest
@@ -183,5 +184,49 @@ class MailerRequest implements MailerRequestInterface
     public function setText(string $text): void
     {
         $this->text = $text;
+    }
+
+    public function getFromAddress(): ?Address
+    {
+        $email = $this->getFrom();
+
+        return empty($email) ? null : Address::fromString($email);
+    }
+
+    public function getToAddresses(): array
+    {
+        return array_map(
+            function ($email) {
+                return Address::fromString($email);
+            },
+            $this->getTo()
+        );
+    }
+
+    public function getCcAddresses(): array
+    {
+        return array_map(
+            function ($email) {
+                return Address::fromString($email);
+            },
+            $this->getCc()
+        );
+    }
+
+    public function getBccAddresses(): array
+    {
+        return array_map(
+            function ($email) {
+                return Address::fromString($email);
+            },
+            $this->getBcc()
+        );
+    }
+
+    public function getReplyToAddress(): ?Address
+    {
+        $email = $this->getFrom();
+
+        return empty($email) ? null : Address::fromString($email);
     }
 }

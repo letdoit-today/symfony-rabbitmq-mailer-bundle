@@ -82,15 +82,15 @@ class MailerReceiverService extends AbstractDirectReceiverService
             $from = $emailRequest->getFrom();
             if (empty($from)) {
                 $config = $this->params->get('letdoittoday.mailer');
-                $from = $config['default_sender'];
+                $emailRequest->setFrom($config['default_sender']);
             }
 
             $email = (new Email())
-                ->from($from)
-                ->to(...$emailRequest->getTo())
-                ->cc(...$emailRequest->getCc())
-                ->bcc(...$emailRequest->getBcc())
-                ->replyTo($emailRequest->getReplyTo())
+                ->from($emailRequest->getFromAddress())
+                ->to(...$emailRequest->getToAddresses())
+                ->cc(...$emailRequest->getCcAddresses())
+                ->bcc(...$emailRequest->getBccAddresses())
+                ->replyTo($emailRequest->getReplyToAddress())
                 ->subject($emailRequest->getSubject())
                 ->text($emailRequest->getText())
                 ->html($emailRequest->getHtml());
