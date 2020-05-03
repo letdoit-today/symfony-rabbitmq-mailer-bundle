@@ -1,0 +1,24 @@
+parameters:
+    env(DEFAULT_EMAIL_SENDER): 'Admin <admin@localhost>'
+
+    letdoittoday.mailer:
+        default_sender: '%env(string:DEFAULT_EMAIL_SENDER)%'
+
+services:
+    DIT\RabbitMQMailerBundle\Service\MailerEmitterService:
+        arguments:
+            - '@parameter_bag'
+            - '@jms_serializer'
+
+    DIT\RabbitMQMailerBundle\Service\MailerReceiverService:
+        arguments:
+            - '@parameter_bag'
+            - '@jms_serializer'
+            - '@mailer.mailer'
+
+    letdoittoday_mailer_message_listener:
+        class: DIT\RabbitMQMailerBundle\Command\DITListenMailerMessageCommand
+        arguments:
+            - '@DIT\RabbitMQMailerBundle\Service\MailerReceiverService'
+        tags:
+            - { name: console.command }
